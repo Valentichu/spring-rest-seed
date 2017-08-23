@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.valentichu.server.core.mapper.UserMapper">
+    <resultMap id="userResultMap" type="com.valentichu.server.core.domain.User">
+        <result property="userId" column="userId" javaType="integer" jdbcType="INTEGER"/>
+        <result property="userName" column="userName" javaType="string" jdbcType="VARCHAR"/>
+        <result property="userPwd" column="userPwd" javaType="string" jdbcType="VARCHAR"/>
+        <result property="roleId" column="roleId" javaType="integer" jdbcType="INTEGER"/>
+        <association property="role" javaType="com.valentichu.server.core.domain.Role">
+            <result property="roleId" column="roleId" javaType="integer" jdbcType="INTEGER"/>
+            <result property="roleName" column="roleName" javaType="string" jdbcType="VARCHAR"/>
+        </association>
+        <collection property="authorities" ofType="com.valentichu.server.core.domain.Authority">
+            <result property="authorityId" column="authorityId" javaType="integer" jdbcType="INTEGER"/>
+            <result property="authorityName" column="authorityName" javaType="string" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getUser" resultMap="userResultMap">
+        SELECT * FROM users u
+        LEFT JOIN roles r ON u.roleId = r.roleId
+        LEFT JOIN role_authority rp ON r.roleId = rp.roleId
+        LEFT JOIN authorities a ON rp.authorityId = a.authorityId
+        WHERE u.userName = #{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="com.valentichu.server.core.domain.User">
+        INSERT INTO users(userName,userPwd,roleId)
+        VALUES (#{userName},#{userPwd},#{roleId})
+    </insert>
+</mapper>
