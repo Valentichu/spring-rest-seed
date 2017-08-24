@@ -1,5 +1,6 @@
 package com.valentichu.server.security.controller;
 
+import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.base.value.ResultGenerator;
 import com.valentichu.server.core.domain.User;
 import com.valentichu.server.base.value.Result;
@@ -44,8 +45,9 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录",notes = "登录")
-    public Result createAuthenticationToken(@RequestBody @ApiParam("用户名和密码") Account account, HttpServletResponse response) throws AuthenticationException {
-        final String token = authenticationService.login(account.getUserName(), account.getUserPwd());
+    public Result createAuthenticationToken(@RequestBody @ApiParam("用户名和密码") Account account,
+                                            HttpServletResponse response) throws AuthenticationException {
+        final String token = authenticationService.login(account);
         Result result = ResultGenerator.genSuccessResult(new Token(token));
         if (enableCookie) {
             cookieUtil.addCookie(header, token, "/", expiration, response);
@@ -55,8 +57,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     @ApiOperation(value = "刷新Token",notes = "刷新Token")
-    public Result refreshAndGetAuthenticationToken(
-            HttpServletRequest request) throws AuthenticationException {
+    public Result refreshAndGetAuthenticationToken(HttpServletRequest request) throws ServiceException {
         final String oldToken = request.getHeader(header);
         final String refreshedToken = authenticationService.refresh(oldToken);
         return ResultGenerator.genSuccessResult(new Token(refreshedToken));
@@ -64,7 +65,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value = "注册",notes = "注册")
-    public Result register(@RequestBody @ApiParam("新增的用户") User userToAdd) throws AuthenticationException {
+    public Result register(@RequestBody @ApiParam("新增的用户") User userToAdd) throws ServiceException {
         authenticationService.register(userToAdd);
         return ResultGenerator.genSuccessResult();
     }

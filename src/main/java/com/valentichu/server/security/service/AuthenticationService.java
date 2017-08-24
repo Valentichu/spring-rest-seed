@@ -1,12 +1,14 @@
 package com.valentichu.server.security.service;
 
+import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.core.domain.User;
+import com.valentichu.server.security.value.Account;
+import org.springframework.security.authentication.BadCredentialsException;
 
-/**
- * 鉴权相关逻辑
- */
 public interface AuthenticationService {
-    void register(User userToAdd);
-    String login(String username, String password);
-    String refresh(String oldToken);
+    void register(User userToAdd) throws ServiceException;
+
+    String login(Account account) throws BadCredentialsException;
+
+    String refresh(String oldToken) throws ServiceException;
 }

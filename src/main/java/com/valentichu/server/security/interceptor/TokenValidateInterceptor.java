@@ -44,7 +44,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
      * 只要能从Token中读出有效信息即为通过校验
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws BadCredentialsException {
         UsernamePasswordAuthenticationToken authentication = getAuthenticationFromHeader(request);
         if (authentication != null) {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -100,7 +100,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
     private UsernamePasswordAuthenticationToken getAuthenticationFromToken(String token) {
         if (token != null && token.startsWith(tokenHead)) {
             String username = jwtTokenUtil.getUsernameFromToken(token);
-            if (username != null) {
+            if (username != null && !username.equals("")) {
                 /* 如果我们足够相信token中的数据，也就是我们足够相信签名token的secret的机制
                 这种情况下，可以不用再查询数据库，而直接采用token中的数据
                 本例中，因为需要从数据库中读取权限，所以还是通过Spring Security的 @UserDetailsService 进行了数据查询

@@ -36,7 +36,7 @@ public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         final String oldToken = cookieUtil.getValue(header, request);
-        if (oldToken == null) {
+        if (oldToken == null || oldToken.equals("")) {
             return true;
         }
         final String newToken = jwtTokenUtil.refreshToken(oldToken);

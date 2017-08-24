@@ -30,10 +30,10 @@ public class GoodController {
     @PreAuthorize("hasAuthority('AUTHORITY_CART')")
     @RequestMapping(value = "/goods", method = RequestMethod.GET)
     @ApiOperation(value = "获取商品列表",notes = "获取商品列表 ")
-    public Result goods(@RequestParam(required = false, name = "page")@ApiParam("页数") Integer page,
-                        @RequestParam(required = false, name = "pageSize")@ApiParam("页面显示条数") Integer pageSize,
-                        @RequestParam(required = false, name = "priceLevel")@ApiParam("价格区间") Integer priceLevel,
-                        @RequestParam(required = false, name = "sort")@ApiParam("排序") Integer sort) {
+    public Result goods(@RequestParam(required = false, name = "page") @ApiParam("页数") Integer page,
+                        @RequestParam(required = false, name = "pageSize") @ApiParam("页面显示条数") Integer pageSize,
+                        @RequestParam(required = false, name = "priceLevel") @ApiParam("价格区间") Integer priceLevel,
+                        @RequestParam(required = false, name = "sort") @ApiParam("排序") Integer sort) {
         List<Good> goodList = goodService.listGoods(page, pageSize, priceLevel, sort);
         Page data = new Page();
         data.setList(goodList);
