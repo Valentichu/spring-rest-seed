@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @Api(value = "商品相关的服务",description = "商品相关的服务")
 public class GoodController {
-
     private final GoodService goodService;
 
     @Autowired

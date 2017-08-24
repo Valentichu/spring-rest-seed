@@ -3,8 +3,7 @@ package com.valentichu.server.base.value;
 /**
  * 响应码枚举，参考HTTP状态码的语义
  */
-public enum ResultCode {
-
+public enum ResultCodeEnum {
     SUCCESS(200),//成功
     FAIL(400),//失败,
     FORBIDDEN(403),
@@ -14,7 +13,7 @@ public enum ResultCode {
 
     public Integer code;
 
-    ResultCode(Integer code) {
+    ResultCodeEnum(Integer code) {
         this.code = code;
     }
 }

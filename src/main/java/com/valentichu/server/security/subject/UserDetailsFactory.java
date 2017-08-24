@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * UserDetail的Factory
  */
 class UserDetailsFactory {
-
     static UserDetailsImpl create(User user) {
         return new UserDetailsImpl(
                 user.getUserId(),

@@ -24,7 +24,7 @@
         WHERE u.userName = #{userName}
     </select>
 
-    <insert id="insertUser" parameterType="com.valentichu.server.core.domain.User">
+    <insert id="saveUser" parameterType="com.valentichu.server.core.domain.User">
         INSERT INTO users(userName,userPwd,roleId)
         VALUES (#{userName},#{userPwd},#{roleId})
     </insert>

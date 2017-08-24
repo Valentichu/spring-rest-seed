@@ -16,9 +16,9 @@ public class CookieUtil {
             return null;
         }
         Cookie cookie = null;
-        for (Cookie _cookie : cookies) {
-            if (_cookie.getName().equals(key)) {
-                cookie = _cookie;
+        for (Cookie tempCookie : cookies) {
+            if (tempCookie.getName().equals(key)) {
+                cookie = tempCookie;
                 break;
             }
         }

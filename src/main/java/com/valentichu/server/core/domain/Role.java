@@ -1,10 +1,11 @@
 package com.valentichu.server.core.domain;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class Role implements Serializable {
-
     private static final long serialVersionUID = 6688729359491493613L;
 
     private Integer roleId;
@@ -33,5 +34,10 @@ public class Role implements Serializable {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

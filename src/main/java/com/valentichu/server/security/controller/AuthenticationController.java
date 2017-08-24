@@ -24,21 +24,16 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/auth")
 @Api(value = "权限相关的服务",description = "权限相关的服务")
 public class AuthenticationController {
-
     @Value("${jwt.header}")
     private String header;
-
     @Value("${jwt.tokenHead}")
     private String tokenHead;
-
     @Value("${jwt.enableCookie}")
     private boolean enableCookie;
-
     @Value("${jwt.expiration}")
     private Integer expiration;
 
     private final AuthenticationService authenticationService;
-
     private final CookieUtil cookieUtil;
 
     @Autowired
@@ -69,8 +64,8 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value = "注册",notes = "注册")
-    public Result register(@RequestBody @ApiParam("新增的用户") User addedUser) throws AuthenticationException {
-        authenticationService.register(addedUser);
+    public Result register(@RequestBody @ApiParam("新增的用户") User userToAdd) throws AuthenticationException {
+        authenticationService.register(userToAdd);
         return ResultGenerator.genSuccessResult();
     }
 }

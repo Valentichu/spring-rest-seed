@@ -1,10 +1,11 @@
 package com.valentichu.server.core.domain;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class User implements Serializable {
-
     private static final long serialVersionUID = -8806539415970751985L;
 
     private Integer userId;
@@ -60,5 +61,10 @@ public class User implements Serializable {
 
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

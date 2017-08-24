@@ -1,9 +1,10 @@
 package com.valentichu.server.security.value;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 
 public class Account implements Serializable {
-
     private static final long serialVersionUID = 132314930571047458L;
 
     private String userName;
@@ -23,5 +24,10 @@ public class Account implements Serializable {
 
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

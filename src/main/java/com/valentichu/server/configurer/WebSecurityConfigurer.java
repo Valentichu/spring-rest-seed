@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
-
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -28,7 +27,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    //配置鉴权管理器使用UserDetail作为subject和使用BCrypt作为密码编码器
+    /**
+     * 配置鉴权管理器使用UserDetail作为subject和使用BCrypt作为密码编码器
+     */
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
@@ -36,13 +37,17 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-    // 装载BCrypt密码编码器
+    /**
+     * 装载BCrypt密码编码器
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //Http Security配置
+    /**
+     * Http Security配置
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -50,8 +55,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 // 基于token，不需要session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // 是否登录由Interceptor通过token校验判断，所以所有请求都不需要Spring Security进行登录校验
-                //Spring Security只用于判断用户是否拥有API访问权限
+                /* 是否登录由Interceptor通过token校验判断，所以所有请求都不需要Spring Security进行登录校验
+                Spring Security只用于判断用户是否拥有API访问权限 */
                 .authorizeRequests().anyRequest().permitAll();
         // 禁用缓存
         httpSecurity.headers().cacheControl();

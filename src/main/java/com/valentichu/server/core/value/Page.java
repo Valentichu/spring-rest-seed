@@ -1,10 +1,11 @@
 package com.valentichu.server.core.value;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class Page implements Serializable {
-
     private static final long serialVersionUID = 8386265706675041431L;
 
     private Integer count;
@@ -25,5 +26,10 @@ public class Page implements Serializable {
     public void setList(List list) {
         this.list = list;
         this.count = list.size();
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

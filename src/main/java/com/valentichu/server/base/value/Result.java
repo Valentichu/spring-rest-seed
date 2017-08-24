@@ -7,15 +7,14 @@ import java.io.Serializable;
  * 统一API响应结果封装
  */
 public class Result implements Serializable {
-
     private static final long serialVersionUID = -4686581693780800154L;
 
     private Integer code;
     private String message;
     private Object data;
 
-    public Result setCode(ResultCode resultCode) {
-        this.code = resultCode.code;
+    public Result setCode(ResultCodeEnum resultCodeEnum) {
+        this.code = resultCodeEnum.code;
         return this;
     }
 

@@ -14,18 +14,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
-
     @Value("${jwt.header}")
     private String header;
-
     @Value("${jwt.expiration}")
     private Integer expiration;
-
     @Value("${jwt.enableCookie}")
     private boolean enableCookie;
 
     private final JwtTokenUtil jwtTokenUtil;
-
     private final CookieUtil cookieUtil;
 
     @Autowired
@@ -40,6 +36,9 @@ public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         final String oldToken = cookieUtil.getValue(header, request);
+        if (oldToken == null) {
+            return true;
+        }
         final String newToken = jwtTokenUtil.refreshToken(oldToken);
         //如果无法得到新Token,说明旧Token失效，删除作废的Cookie
         if (newToken == null) {

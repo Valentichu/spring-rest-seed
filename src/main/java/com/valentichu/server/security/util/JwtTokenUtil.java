@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,32 +15,15 @@ import java.util.Map;
  */
 @Component
 public class JwtTokenUtil {
-
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "crt";
 
     @Value("${jwt.expiration}")
     private Long expiration;
-
     @Value("${jwt.secret}")
     private String secret;
-
     @Value("${jwt.tokenHead}")
     private String tokenHead;
-
-    private Claims getClaimsFromToken(String originalToken) {
-        Claims claims;
-        final String token = originalToken.substring(tokenHead.length());
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
-    }
 
     public String getUsernameFromToken(String originalToken) {
         String username;
@@ -52,17 +36,6 @@ public class JwtTokenUtil {
         return username;
     }
 
-    private Date getExpirationDateFromToken(String originalToken) {
-        Date expiration;
-        try {
-            final Claims claims = getClaimsFromToken(originalToken);
-            expiration = claims.getExpiration();
-        } catch (Exception e) {
-            expiration = null;
-        }
-        return expiration;
-    }
-
     public Boolean isTokenExpired(String originalToken) {
         try {
             final Date expiration = getExpirationDateFromToken(originalToken);
@@ -70,19 +43,6 @@ public class JwtTokenUtil {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
-    }
-
-    private String generateToken(Map<String, Object> claims) {
-        final String originalToken = Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-        return tokenHead + originalToken;
     }
 
     public String generateToken(String userName) {
@@ -106,5 +66,43 @@ public class JwtTokenUtil {
         } else {
             return null;
         }
+    }
+
+    private Claims getClaimsFromToken(String originalToken) {
+        Claims claims;
+        final String token = originalToken.substring(tokenHead.length());
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
+        return claims;
+    }
+
+    private Date getExpirationDateFromToken(String originalToken) {
+        Date expiration;
+        try {
+            final Claims claims = getClaimsFromToken(originalToken);
+            expiration = claims.getExpiration();
+        } catch (Exception e) {
+            expiration = null;
+        }
+        return expiration;
+    }
+
+    private Date generateExpirationDate() {
+        return new Date(System.currentTimeMillis() + expiration * 1000);
+    }
+
+    private String generateToken(Map<String, Object> claims) {
+        final String originalToken = Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(generateExpirationDate())
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+        return tokenHead + originalToken;
     }
 }

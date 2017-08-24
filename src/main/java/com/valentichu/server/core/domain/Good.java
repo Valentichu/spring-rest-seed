@@ -1,9 +1,10 @@
 package com.valentichu.server.core.domain;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 
 public class Good implements Serializable {
-
     private static final long serialVersionUID = 7552490657503004382L;
 
     private Integer productId;
@@ -41,5 +42,10 @@ public class Good implements Serializable {
 
     public void setProductImage(String productImage) {
         this.productImage = productImage;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

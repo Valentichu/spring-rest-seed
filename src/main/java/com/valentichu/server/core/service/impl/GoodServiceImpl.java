@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class GoodServiceImpl implements GoodService {
-
     private final GoodMapper goodMapper;
 
     @Autowired

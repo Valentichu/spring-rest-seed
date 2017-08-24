@@ -26,15 +26,20 @@ import java.util.List;
  */
 @Configuration
 public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
-
-    //装载Token认证拦截器
-    private final TokenValidateInterceptor tokenValidateInterceptor;
-
-    //装载Cookie处理Token的拦截器
-    private final CookieRefreshInterceptor cookieRefreshInterceptor;
-
+    /**
+     * 装载是否使用Cookie中的Token验证
+     */
     @Value("${jwt.enableCookie}")
     private boolean enableCookie;
+
+    /**
+     * 装载Token认证拦截器
+     */
+    private final TokenValidateInterceptor tokenValidateInterceptor;
+    /**
+     * 装载Cookie处理Token的拦截器
+     */
+    private final CookieRefreshInterceptor cookieRefreshInterceptor;
 
     @Autowired
     public WebMvcConfigurer(TokenValidateInterceptor tokenValidateInterceptor, CookieRefreshInterceptor cookieRefreshInterceptor) {
@@ -42,7 +47,9 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         this.cookieRefreshInterceptor = cookieRefreshInterceptor;
     }
 
-    //更改Tomcat容器设置：返回的Cookie允许空格
+    /**
+     * 更改Tomcat容器设置：返回的Cookie允许空格
+     */
     @Bean
     public EmbeddedServletContainerCustomizer customizer() {
         return container -> {
@@ -53,7 +60,9 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         };
     }
 
-    //使用阿里 FastJson 作为JSON MessageConverter
+    /**
+     * 使用阿里 FastJson 作为JSON MessageConverter
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
@@ -68,19 +77,23 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         converters.add(converter);
     }
 
-    //添加拦截器
+    /**
+     * 添加拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //Token认证拦截器
-        registry.addInterceptor(tokenValidateInterceptor).excludePathPatterns("/auth/**"/*, "/goods"*/);//不需要认证是否登录的域
-        //如果允许使用Cookie,自动更新Cookie中的Token
+        //Token认证拦截器,参数为不需要认证是否登录的域
+        registry.addInterceptor(tokenValidateInterceptor).excludePathPatterns("/auth/**"/*, "/goods"*/);
+        //如果允许使用Cookie,自动更新Cookie中的Token，参数为不需要自动更新Cookie中的Token的域
         if (enableCookie) {
-            registry.addInterceptor(cookieRefreshInterceptor).excludePathPatterns("/auth/**"/*, "/goods"*/);//不需要自动更新Cookie中的Token的域
+            registry.addInterceptor(cookieRefreshInterceptor).excludePathPatterns("/auth/**"/*, "/goods"*/);
         }
 
     }
 
-    //解决跨域问题
+    /**
+     * 解决跨域问题
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         //registry.addMapping("/**");

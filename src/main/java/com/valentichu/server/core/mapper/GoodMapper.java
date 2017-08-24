@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface GoodMapper {
-
     List<Good> listGoods(@Param("skip") Integer skip,
                          @Param("limit") Integer limit,
                          @Param("max") Integer max,

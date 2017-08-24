@@ -16,11 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenUtil jwtTokenUtil;
-
     private final UserMapper userMapper;
 
     @Autowired
@@ -40,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String rawPassword = userToAdd.getUserPwd();
         userToAdd.setUserPwd(encoder.encode(rawPassword));
         userToAdd.setRoleId(1);
-        userMapper.insertUser(userToAdd);
+        userMapper.saveUser(userToAdd);
     }
 
     @Override
