@@ -1,7 +1,6 @@
 package com.valentichu.server.core.service;
 
 import com.valentichu.server.core.domain.Good;
-
 import java.util.List;
 
 public interface GoodService {

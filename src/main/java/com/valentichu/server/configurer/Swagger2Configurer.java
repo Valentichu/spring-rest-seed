@@ -28,7 +28,6 @@ public class Swagger2Configurer {
         return new ApiInfoBuilder()
                 .title("Spring-RESTful-API-Seed")
                 .description("基于Spring Boot的种子项目")
-                .version("1.0")
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.valentichu.server.base.value;
 
 import com.alibaba.fastjson.JSON;
-
 import java.io.Serializable;
 
 /**

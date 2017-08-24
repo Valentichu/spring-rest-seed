@@ -6,7 +6,7 @@
         SELECT * FROM goods
 
         <if test="max != null and min != null">
-            WHERE salePrice &gt;= ${min} AND G.salePrice &lt;= ${max}
+            WHERE salePrice &gt;= ${min} AND salePrice &lt;= ${max}
         </if>
 
         <if test="sort != null">

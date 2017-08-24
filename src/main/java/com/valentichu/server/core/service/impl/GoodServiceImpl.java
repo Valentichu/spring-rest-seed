@@ -1,12 +1,10 @@
 package com.valentichu.server.core.service.impl;
 
 import com.valentichu.server.core.service.GoodService;
-import com.valentichu.server.core.value.Page;
 import com.valentichu.server.core.mapper.GoodMapper;
 import com.valentichu.server.core.domain.Good;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
