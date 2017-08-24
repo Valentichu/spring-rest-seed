@@ -85,7 +85,6 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
         if (!enableCookie) {
             return null;
         }
-
         final String token = cookieUtil.getValue(header, request);
         if (token != null) {
             return getAuthenticationFromToken(token);
