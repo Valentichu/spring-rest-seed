@@ -7,6 +7,9 @@ import com.valentichu.server.security.service.AuthenticationService;
 import com.valentichu.server.security.util.CookieUtil;
 import com.valentichu.server.security.value.Account;
 import com.valentichu.server.security.value.Token;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping(value = "/auth")
+@Api(value = "权限相关的服务",description = "权限相关的服务")
 public class AuthenticationController {
 
     @Value("${jwt.header}")
@@ -46,7 +50,8 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result createAuthenticationToken(@RequestBody Account account, HttpServletResponse response) throws AuthenticationException {
+    @ApiOperation(value = "登录",notes = "登录")
+    public Result createAuthenticationToken(@RequestBody @ApiParam("用户名和密码") Account account, HttpServletResponse response) throws AuthenticationException {
         final String token = authenticationService.login(account.getUserName(), account.getUserPwd());
         Result result = ResultGenerator.genSuccessResult(new Token(token));
         if (enableCookie) {
@@ -56,6 +61,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
+    @ApiOperation(value = "刷新Token",notes = "刷新Token")
     public Result refreshAndGetAuthenticationToken(
             HttpServletRequest request) throws AuthenticationException {
         final String oldToken = request.getHeader(header);
@@ -64,7 +70,8 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public Result register(@RequestBody User addedUser) throws AuthenticationException {
+    @ApiOperation(value = "注册",notes = "注册")
+    public Result register(@RequestBody @ApiParam("新增的用户") User addedUser) throws AuthenticationException {
         authenticationService.register(addedUser);
         return ResultGenerator.genSuccessResult();
     }
