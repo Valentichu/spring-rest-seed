@@ -1,7 +1,7 @@
 package com.valentichu.server.security.interceptor;
 
-import com.valentichu.server.security.util.CookieUtil;
-import com.valentichu.server.security.util.JwtTokenUtil;
+import com.valentichu.server.security.util.CookieUtils;
+import com.valentichu.server.security.util.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,14 +32,14 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
     private boolean enableCookie;
 
     private final UserDetailsService userDetailsService;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final CookieUtil cookieUtil;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final CookieUtils cookieUtils;
 
     @Autowired
-    public TokenValidateInterceptor(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
+    public TokenValidateInterceptor(UserDetailsService userDetailsService, JwtTokenUtils jwtTokenUtils, CookieUtils cookieUtils) {
         this.userDetailsService = userDetailsService;
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.cookieUtil = cookieUtil;
+        this.jwtTokenUtils = jwtTokenUtils;
+        this.cookieUtils = cookieUtils;
     }
 
     /**
@@ -62,7 +63,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
             return true;
         } else {
             //如果Cookie里面的Token校验失败，删除作废的Cookie
-            cookieUtil.removeCookie(header, "/", response);
+            cookieUtils.removeCookie(header, "/", response);
         }
 
         throw new BadCredentialsException("Token invalid");
@@ -73,7 +74,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
      */
     private UsernamePasswordAuthenticationToken getAuthenticationFromHeader(HttpServletRequest request) {
         final String token = request.getHeader(header);
-        if (token == null) {
+        if (StringUtils.isEmpty(token)) {
             return null;
         }
 
@@ -89,8 +90,8 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
             return null;
         }
 
-        final String token = cookieUtil.getValue(header, request);
-        if (token == null) {
+        final String token = cookieUtils.getValue(header, request);
+        if (StringUtils.isEmpty(token)) {
             return null;
         }
 
@@ -101,12 +102,12 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
      * 尝试从Token中取出身份信息
      */
     private UsernamePasswordAuthenticationToken getAuthenticationFromToken(String token) {
-        if (token == null || !token.startsWith(tokenHead)) {
+        if (StringUtils.isEmpty(token) || !token.startsWith(tokenHead)) {
             return null;
         }
 
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        if (username == null || username.equals("")) {
+        String userName = jwtTokenUtils.getUsernameFromToken(token);
+        if (StringUtils.isEmpty(userName)) {
             return null;
         }
 
@@ -114,7 +115,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
         这种情况下，可以不用再查询数据库，而直接采用token中的数据
         本例中，因为需要从数据库中读取权限，所以还是通过Spring Security的 @UserDetailsService 进行了数据查询
         但简单验证的话，可以采用直接验证token是否合法来避免昂贵的数据查询 */
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
     }

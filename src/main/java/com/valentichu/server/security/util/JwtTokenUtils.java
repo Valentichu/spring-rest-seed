@@ -17,7 +17,7 @@ import java.util.Map;
  * created on 2017/08/25
  */
 @Component
-public class JwtTokenUtil {
+public class JwtTokenUtils {
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "crt";
 

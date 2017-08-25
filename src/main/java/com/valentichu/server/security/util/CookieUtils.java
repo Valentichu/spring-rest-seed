@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * created on 2017/08/25
  */
 @Component
-public class CookieUtil {
+public class CookieUtils {
     public String getValue(String key, HttpServletRequest request) {
         final Cookie[] cookies = request.getCookies();
         if (cookies == null) {

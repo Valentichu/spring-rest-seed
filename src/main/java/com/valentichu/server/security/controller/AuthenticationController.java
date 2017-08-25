@@ -4,7 +4,7 @@ import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.base.value.ResultGenerator;
 import com.valentichu.server.base.value.Result;
 import com.valentichu.server.security.service.AuthenticationService;
-import com.valentichu.server.security.util.CookieUtil;
+import com.valentichu.server.security.util.CookieUtils;
 import com.valentichu.server.security.value.Account;
 import com.valentichu.server.security.value.RegisterInfo;
 import com.valentichu.server.security.value.Token;
@@ -38,12 +38,12 @@ public class AuthenticationController {
     private Integer expiration;
 
     private final AuthenticationService authenticationService;
-    private final CookieUtil cookieUtil;
+    private final CookieUtils cookieUtils;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, CookieUtil cookieUtil) {
+    public AuthenticationController(AuthenticationService authenticationService, CookieUtils cookieUtils) {
         this.authenticationService = authenticationService;
-        this.cookieUtil = cookieUtil;
+        this.cookieUtils = cookieUtils;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -53,7 +53,7 @@ public class AuthenticationController {
         final String token = authenticationService.login(account);
         Result result = ResultGenerator.genSuccessResult(new Token(token));
         if (enableCookie) {
-            cookieUtil.addCookie(header, token, "/", expiration, response);
+            cookieUtils.addCookie(header, token, "/", expiration, response);
         }
         return result;
     }

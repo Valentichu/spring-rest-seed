@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 显示页面VO
+ * 显示页面的VO
  *
  * @author Valentichu
  * created on 2017/08/25

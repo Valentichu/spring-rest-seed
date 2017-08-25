@@ -1,7 +1,7 @@
 package com.valentichu.server.security.interceptor;
 
-import com.valentichu.server.security.util.CookieUtil;
-import com.valentichu.server.security.util.JwtTokenUtil;
+import com.valentichu.server.security.util.CookieUtils;
+import com.valentichu.server.security.util.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,13 +25,13 @@ public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
     @Value("${jwt.enableCookie}")
     private boolean enableCookie;
 
-    private final JwtTokenUtil jwtTokenUtil;
-    private final CookieUtil cookieUtil;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final CookieUtils cookieUtils;
 
     @Autowired
-    public CookieRefreshInterceptor(JwtTokenUtil jwtTokenUtil, CookieUtil cookieUtil) {
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.cookieUtil = cookieUtil;
+    public CookieRefreshInterceptor(JwtTokenUtils jwtTokenUtils, CookieUtils cookieUtils) {
+        this.jwtTokenUtils = jwtTokenUtils;
+        this.cookieUtils = cookieUtils;
     }
 
     @Override
@@ -40,19 +40,19 @@ public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        final String oldToken = cookieUtil.getValue(header, request);
+        final String oldToken = cookieUtils.getValue(header, request);
         if (oldToken == null || oldToken.equals("")) {
             return true;
         }
 
-        final String newToken = jwtTokenUtil.refreshToken(oldToken);
+        final String newToken = jwtTokenUtils.refreshToken(oldToken);
         //如果无法得到新Token,说明旧Token失效，删除作废的Cookie
         if (newToken == null) {
-            cookieUtil.removeCookie(header, "/", response);
+            cookieUtils.removeCookie(header, "/", response);
             return true;
         }
 
-        cookieUtil.addCookie(header, newToken, "/", expiration, response);
+        cookieUtils.addCookie(header, newToken, "/", expiration, response);
         return true;
     }
 }
