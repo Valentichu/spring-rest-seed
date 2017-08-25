@@ -2,6 +2,9 @@ package com.valentichu.server.base.value;
 
 /**
  * 响应结果生成工具
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 public class ResultGenerator {
     private static final String DEFAULT_SUCCESS_MESSAGE = "SUCCESS";

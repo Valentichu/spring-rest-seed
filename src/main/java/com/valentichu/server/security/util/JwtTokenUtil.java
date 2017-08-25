@@ -12,6 +12,9 @@ import java.util.Map;
 
 /**
  * Jwt加密和解密的工具类
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Component
 public class JwtTokenUtil {
@@ -30,18 +33,9 @@ public class JwtTokenUtil {
         try {
             final Claims claims = getClaimsFromToken(originalToken);
             username = claims.getSubject();
+            return username;
         } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
-
-    public Boolean isTokenExpired(String originalToken) {
-        try {
-            final Date expiration = getExpirationDateFromToken(originalToken);
-            return expiration.before(new Date());
-        } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
@@ -53,44 +47,47 @@ public class JwtTokenUtil {
     }
 
     public String refreshToken(String oldOriginalToken) {
-        String refreshedToken;
-        if (!isTokenExpired(oldOriginalToken)) {
-            try {
-                final Claims claims = getClaimsFromToken(oldOriginalToken);
-                claims.put(CLAIM_KEY_CREATED, new Date());
-                refreshedToken = generateToken(claims);
-            } catch (Exception e) {
-                refreshedToken = null;
-            }
-            return refreshedToken;
-        } else {
+        if (isTokenExpired(oldOriginalToken)) {
+            return null;
+        }
+
+        try {
+            final Claims claims = getClaimsFromToken(oldOriginalToken);
+            claims.put(CLAIM_KEY_CREATED, new Date());
+            return generateToken(claims);
+        } catch (Exception e) {
             return null;
         }
     }
 
     private Claims getClaimsFromToken(String originalToken) {
-        Claims claims;
-        final String token = originalToken.substring(tokenHead.length());
         try {
-            claims = Jwts.parser()
+            final String token = originalToken.substring(tokenHead.length());
+            return Jwts.parser()
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            claims = null;
+            return null;
         }
-        return claims;
     }
 
     private Date getExpirationDateFromToken(String originalToken) {
-        Date expiration;
         try {
             final Claims claims = getClaimsFromToken(originalToken);
-            expiration = claims.getExpiration();
+            return claims.getExpiration();
         } catch (Exception e) {
-            expiration = null;
+            return null;
         }
-        return expiration;
+    }
+
+    private Boolean isTokenExpired(String originalToken) {
+        try {
+            final Date expiration = getExpirationDateFromToken(originalToken);
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private Date generateExpirationDate() {

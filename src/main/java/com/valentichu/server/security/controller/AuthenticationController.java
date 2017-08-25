@@ -2,11 +2,11 @@ package com.valentichu.server.security.controller;
 
 import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.base.value.ResultGenerator;
-import com.valentichu.server.core.domain.User;
 import com.valentichu.server.base.value.Result;
 import com.valentichu.server.security.service.AuthenticationService;
 import com.valentichu.server.security.util.CookieUtil;
 import com.valentichu.server.security.value.Account;
+import com.valentichu.server.security.value.RegisterInfo;
 import com.valentichu.server.security.value.Token;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 鉴权相关的Controller
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @RestController
 @RequestMapping(value = "/auth")
@@ -45,7 +48,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录",notes = "登录")
-    public Result createAuthenticationToken(@RequestBody @ApiParam("用户名和密码") Account account,
+    public Result createAuthenticationToken(@RequestBody @ApiParam(value = "用户名和密码", required = true) Account account,
                                             HttpServletResponse response) throws AuthenticationException {
         final String token = authenticationService.login(account);
         Result result = ResultGenerator.genSuccessResult(new Token(token));
@@ -65,8 +68,8 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ApiOperation(value = "注册",notes = "注册")
-    public Result register(@RequestBody @ApiParam("新增的用户") User userToAdd) throws ServiceException {
-        authenticationService.register(userToAdd);
+    public Result register(@RequestBody @ApiParam(value = "新增的用户", required = true) RegisterInfo registerInfo) throws ServiceException {
+        authenticationService.register(registerInfo);
         return ResultGenerator.genSuccessResult();
     }
 }

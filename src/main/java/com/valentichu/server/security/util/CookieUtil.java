@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 处理Cookie的工具类
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Component
 public class CookieUtil {

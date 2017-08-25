@@ -3,25 +3,28 @@ package com.valentichu.server.core.domain;
 import com.alibaba.fastjson.JSON;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * 用户DO
+ *
+ * @author Valentichu
+ * created on 2017/08/25
+ */
 public class User implements Serializable {
     private static final long serialVersionUID = -8806539415970751985L;
 
     private Integer userId;
     private String userName;
-    private String userPwd;
+    private String userPassword;
     private Integer roleId;
+    private String roleName;
+    private Timestamp gmtCreate;
+    private Timestamp gmtModified;
+
     private Role role;
     private List<Authority> authorities;
-
-    public List<Authority> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
-    }
 
     public Integer getRoleId() {
         return roleId;
@@ -31,12 +34,12 @@ public class User implements Serializable {
         this.roleId = roleId;
     }
 
-    public Role getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Integer getUserId() {
@@ -55,12 +58,44 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public String getUserPwd() {
-        return userPwd;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUserPwd(String userPwd) {
-        this.userPwd = userPwd;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public Timestamp getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Timestamp gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Timestamp getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Timestamp gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override

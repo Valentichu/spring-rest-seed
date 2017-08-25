@@ -2,30 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.valentichu.server.core.mapper.UserMapper">
     <resultMap id="userResultMap" type="com.valentichu.server.core.domain.User">
-        <result property="userId" column="userId" javaType="integer" jdbcType="INTEGER"/>
-        <result property="userName" column="userName" javaType="string" jdbcType="VARCHAR"/>
-        <result property="userPwd" column="userPwd" javaType="string" jdbcType="VARCHAR"/>
-        <result property="roleId" column="roleId" javaType="integer" jdbcType="INTEGER"/>
-        <association property="role" javaType="com.valentichu.server.core.domain.Role">
-            <result property="roleId" column="roleId" javaType="integer" jdbcType="INTEGER"/>
-            <result property="roleName" column="roleName" javaType="string" jdbcType="VARCHAR"/>
-        </association>
+        <result property="userId" column="user_id" javaType="integer" jdbcType="BIGINT"/>
+        <result property="userName" column="user_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" javaType="string" jdbcType="VARCHAR"/>
+        <result property="roleId" column="role_id" javaType="integer" jdbcType="BIGINT"/>
+        <result property="roleName" column="role_name" javaType="string" jdbcType="VARCHAR"/>
         <collection property="authorities" ofType="com.valentichu.server.core.domain.Authority">
-            <result property="authorityId" column="authorityId" javaType="integer" jdbcType="INTEGER"/>
-            <result property="authorityName" column="authorityName" javaType="string" jdbcType="VARCHAR"/>
+            <result property="authorityId" column="authority_id" javaType="integer" jdbcType="BIGINT"/>
+            <result property="authorityName" column="authority_name" javaType="string" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
     <select id="getUser" resultMap="userResultMap">
-        SELECT * FROM users u
-        LEFT JOIN roles r ON u.roleId = r.roleId
-        LEFT JOIN role_authority rp ON r.roleId = rp.roleId
-        LEFT JOIN authorities a ON rp.authorityId = a.authorityId
-        WHERE u.userName = #{userName}
+        SELECT u.user_id, u.user_name, u.user_password, u.role_id, u.role_name, a.authority_id, a.authority_name FROM
+        user u
+        LEFT JOIN role_authority rp ON u.role_id = rp.role_id
+        LEFT JOIN authority a ON rp.authority_id = a.authority_id
+        WHERE u.user_name = #{userName}
     </select>
 
     <insert id="saveUser" parameterType="com.valentichu.server.core.domain.User">
-        INSERT INTO users(userName,userPwd,roleId)
-        VALUES (#{userName},#{userPwd},#{roleId})
+        INSERT INTO user (user_name, user_password, role_id, role_name, gmt_create)
+        VALUES (#{userName}, #{userPassword}, #{roleId}, (SELECT role_name FROM role WHERE role_id = #{roleId}),
+        #{gmtCreate})
     </insert>
 </mapper>

@@ -7,6 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * 商品Service的实现
+ *
+ * @author Valentichu
+ * created on 2017/08/25
+ */
 @Service
 public class GoodServiceImpl implements GoodService {
     private final GoodMapper goodMapper;

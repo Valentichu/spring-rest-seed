@@ -18,10 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 统一异常处理（Security Filter异常除外）
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @RestControllerAdvice
 public class DefaultExceptionHandler {
-    private final Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
+    private final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
 
     @ExceptionHandler(value = ServiceException.class)
     public Result serviceException(HttpServletRequest request, Object handler, Exception e) {

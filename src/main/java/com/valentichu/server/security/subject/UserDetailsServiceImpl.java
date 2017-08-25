@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * UserDetailService的实现，执行鉴权等安全相关代码时会由Spring Security容器自动调用
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

@@ -5,6 +5,9 @@ import java.io.Serializable;
 
 /**
  * 统一API响应结果封装
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = -4686581693780800154L;

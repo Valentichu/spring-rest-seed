@@ -6,6 +6,7 @@ import com.valentichu.server.core.mapper.UserMapper;
 import com.valentichu.server.security.service.AuthenticationService;
 import com.valentichu.server.security.util.JwtTokenUtil;
 import com.valentichu.server.security.value.Account;
+import com.valentichu.server.security.value.RegisterInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +14,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 /**
- * 鉴权相关逻辑
+ * 鉴权Service的实现
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -30,9 +36,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void register(User userToAdd) throws ServiceException {
-        final String username = userToAdd.getUserName();
-        final String rawPassword = userToAdd.getUserPwd();
+    public void register(RegisterInfo registerInfo) throws ServiceException {
+        final String username = registerInfo.getUserName();
+        final String rawPassword = registerInfo.getUserPassword();
         if (username == null || username.equals("") || rawPassword == null || rawPassword.equals("")) {
             throw new ServiceException("注册用户名或密码不能为空");
         }
@@ -40,16 +46,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ServiceException("已有该用户");
         }
 
+        User userToAdd = new User();
+        userToAdd.setUserName(username);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        userToAdd.setUserPwd(encoder.encode(rawPassword));
+        userToAdd.setUserPassword(encoder.encode(rawPassword));
         userToAdd.setRoleId(1);
+        userToAdd.setGmtCreate(new Timestamp(System.currentTimeMillis()));
         userMapper.saveUser(userToAdd);
     }
 
     @Override
     public String login(Account account) throws BadCredentialsException {
         final String username = account.getUserName();
-        final String password = account.getUserPwd();
+        final String password = account.getUserPassword();
         if (username == null || username.equals("") || password == null || password.equals("")) {
             throw new ServiceException("用户名或密码不能为空");
         }
@@ -65,12 +74,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (oldToken == null || oldToken.equals("")) {
             throw new ServiceException("Token无效");
         }
+
         final String refreshedToken = jwtTokenUtil.refreshToken(oldToken);
-        if (refreshedToken != null) {
-            return refreshedToken;
-        } else {
+        if (refreshedToken == null) {
             throw new ServiceException("Token已过期或无效");
         }
+
+        return refreshedToken;
     }
 }
 

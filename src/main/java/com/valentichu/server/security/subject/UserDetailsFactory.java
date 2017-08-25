@@ -10,13 +10,16 @@ import java.util.stream.Collectors;
 
 /**
  * UserDetail的Factory
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 class UserDetailsFactory {
     static UserDetailsImpl create(User user) {
         return new UserDetailsImpl(
                 user.getUserId(),
                 user.getUserName(),
-                user.getUserPwd(),
+                user.getUserPassword(),
                 authoritiesToGrantedAuthorities(user.getAuthorities())
         );
     }

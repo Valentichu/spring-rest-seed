@@ -7,6 +7,9 @@ import java.util.Collection;
 
 /**
  * UserDetail的实现，安全相关的subject，存储安全相关信息，如密码，权限
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 5105547072025098344L;

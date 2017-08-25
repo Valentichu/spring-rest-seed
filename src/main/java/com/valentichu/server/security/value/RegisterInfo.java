@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 
 /**
- * 登陆时的帐号信息
+ * 注册信息
  *
  * @author Valentichu
  * created on 2017/08/25
  */
-public class Account implements Serializable {
-    private static final long serialVersionUID = 132314930571047458L;
+public class RegisterInfo implements Serializable {
+    private static final long serialVersionUID = 2054275648904858733L;
 
     private String userName;
     private String userPassword;

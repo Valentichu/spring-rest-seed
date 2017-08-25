@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * 刷新Cookie的拦截器
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Component
 public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
@@ -35,18 +39,20 @@ public class CookieRefreshInterceptor extends HandlerInterceptorAdapter {
         if (!enableCookie) {
             return true;
         }
+
         final String oldToken = cookieUtil.getValue(header, request);
         if (oldToken == null || oldToken.equals("")) {
             return true;
         }
+
         final String newToken = jwtTokenUtil.refreshToken(oldToken);
         //如果无法得到新Token,说明旧Token失效，删除作废的Cookie
         if (newToken == null) {
             cookieUtil.removeCookie(header, "/", response);
             return true;
-        } else {
-            cookieUtil.addCookie(header, newToken, "/", expiration, response);
-            return true;
         }
+
+        cookieUtil.addCookie(header, newToken, "/", expiration, response);
+        return true;
     }
 }

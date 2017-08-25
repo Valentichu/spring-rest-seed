@@ -5,6 +5,12 @@ import com.alibaba.fastjson.JSON;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 显示页面VO
+ *
+ * @author Valentichu
+ * created on 2017/08/25
+ */
 public class Page implements Serializable {
     private static final long serialVersionUID = 8386265706675041431L;
 

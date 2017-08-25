@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.valentichu.server.core.mapper.GoodMapper">
-    <select id="listGoods" resultType="com.valentichu.server.core.domain.Good">
-        SELECT * FROM goods
+    <resultMap id="goodResultMap" type="com.valentichu.server.core.domain.Good">
+        <result property="productId" column="product_id" javaType="integer" jdbcType="BIGINT"/>
+        <result property="productName" column="product_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="salePrice" column="sale_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+        <result property="productImage" column="product_image" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="listGoods" resultMap="goodResultMap">
+        SELECT product_id, product_name, sale_price, product_image FROM good
 
         <if test="max != null and min != null">
-            WHERE salePrice &gt;= ${min} AND salePrice &lt;= ${max}
+            WHERE sale_price &gt;= ${min} AND sale_price &lt;= ${max}
         </if>
 
         <if test="sort != null">
-            ORDER BY salePrice ${sort}
+            ORDER BY sale_price ${sort}
         </if>
 
         <if test="sort == null">
-            ORDER BY productId
+            ORDER BY product_id
         </if>
 
         <if test="skip != null and limit != null">

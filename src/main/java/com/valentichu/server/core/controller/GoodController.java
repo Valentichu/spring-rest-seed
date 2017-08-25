@@ -17,8 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 商品相关API控制器
+ *
+ * @author Valentichu
+ * created on 2017/08/25
+ */
 @RestController
-@Api(value = "商品相关的服务",description = "商品相关的服务")
+@Api(value = "商品相关的API", description = "商品相关的API")
 public class GoodController {
     private final GoodService goodService;
 

@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 校验Token的拦截器
+ *
+ * @author Valentichu
+ * created on 2017/08/25
  */
 @Component
 public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
@@ -70,11 +73,11 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
      */
     private UsernamePasswordAuthenticationToken getAuthenticationFromHeader(HttpServletRequest request) {
         final String token = request.getHeader(header);
-        if (token != null) {
-            return getAuthenticationFromToken(token);
-        } else {
+        if (token == null) {
             return null;
         }
+
+        return getAuthenticationFromToken(token);
     }
 
     /**
@@ -85,32 +88,33 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
         if (!enableCookie) {
             return null;
         }
+
         final String token = cookieUtil.getValue(header, request);
-        if (token != null) {
-            return getAuthenticationFromToken(token);
-        } else {
+        if (token == null) {
             return null;
         }
+
+        return getAuthenticationFromToken(token);
     }
 
     /**
      * 尝试从Token中取出身份信息
      */
     private UsernamePasswordAuthenticationToken getAuthenticationFromToken(String token) {
-        if (token != null && token.startsWith(tokenHead)) {
-            String username = jwtTokenUtil.getUsernameFromToken(token);
-            if (username != null && !username.equals("")) {
-                /* 如果我们足够相信token中的数据，也就是我们足够相信签名token的secret的机制
-                这种情况下，可以不用再查询数据库，而直接采用token中的数据
-                本例中，因为需要从数据库中读取权限，所以还是通过Spring Security的 @UserDetailsService 进行了数据查询
-                但简单验证的话，可以采用直接验证token是否合法来避免昂贵的数据查询 */
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            } else {
-                return null;
-            }
-        } else {
+        if (token == null || !token.startsWith(tokenHead)) {
             return null;
         }
+
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        if (username == null || username.equals("")) {
+            return null;
+        }
+        /* 如果我们足够相信token中的数据，也就是我们足够相信签名token的secret的机制
+        这种情况下，可以不用再查询数据库，而直接采用token中的数据
+        本例中，因为需要从数据库中读取权限，所以还是通过Spring Security的 @UserDetailsService 进行了数据查询
+        但简单验证的话，可以采用直接验证token是否合法来避免昂贵的数据查询 */
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
     }
 }
