@@ -33,7 +33,6 @@ public class GoodController {
         this.goodService = goodService;
     }
 
-    @PreAuthorize("hasAuthority('AUTHORITY_CART')")
     @RequestMapping(value = "/goods", method = RequestMethod.GET)
     @ApiOperation(value = "获取商品列表",notes = "获取商品列表 ")
     public Result goods(@RequestParam(required = false, name = "page") @ApiParam("页数") Integer page,

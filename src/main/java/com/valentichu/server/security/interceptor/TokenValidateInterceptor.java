@@ -1,7 +1,7 @@
 package com.valentichu.server.security.interceptor;
 
-import com.valentichu.server.security.util.CookieUtils;
-import com.valentichu.server.security.util.JwtTokenUtils;
+import com.valentichu.server.common.util.CookieUtils;
+import com.valentichu.server.common.util.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -56,14 +56,17 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        authentication = getAuthenticationFromCookie(request);
-        if (authentication != null) {
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return true;
-        } else {
-            //如果Cookie里面的Token校验失败，删除作废的Cookie
-            cookieUtils.removeCookie(header, "/", response);
+        //在允许Cookie的时候才校验
+        if (enableCookie) {
+            authentication = getAuthenticationFromCookie(request);
+            if (authentication != null) {
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return true;
+            } else {
+                //如果Cookie里面的Token校验失败，删除作废的Cookie
+                cookieUtils.removeCookie(header, "/", response);
+            }
         }
 
         throw new BadCredentialsException("Token invalid");
@@ -85,11 +88,6 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
      * 校验Cookie中的Token
      */
     private UsernamePasswordAuthenticationToken getAuthenticationFromCookie(HttpServletRequest request) {
-        //在允许Cookie的时候才校验
-        if (!enableCookie) {
-            return null;
-        }
-
         final String token = cookieUtils.getValue(header, request);
         if (StringUtils.isEmpty(token)) {
             return null;
@@ -106,7 +104,7 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
             return null;
         }
 
-        String userName = jwtTokenUtils.getUsernameFromToken(token);
+        String userName = jwtTokenUtils.getUserNameFromToken(token);
         if (StringUtils.isEmpty(userName)) {
             return null;
         }
@@ -117,6 +115,5 @@ public class TokenValidateInterceptor extends HandlerInterceptorAdapter {
         但简单验证的话，可以采用直接验证token是否合法来避免昂贵的数据查询 */
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
     }
 }

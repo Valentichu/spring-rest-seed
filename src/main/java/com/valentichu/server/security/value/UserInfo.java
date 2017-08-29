@@ -10,17 +10,27 @@ import java.io.Serializable;
  * @author Valentichu
  * created on 2017/08/25
  */
-public class Token implements Serializable {
+public class UserInfo implements Serializable {
     private static final long serialVersionUID = -8217639949507667431L;
 
     private String token;
+    private String userName;
 
-    public Token(String token) {
+    public UserInfo(String token) {
+        this.token = token;
+    }
+
+    public UserInfo(String userName, String token) {
+        this.userName = userName;
         this.token = token;
     }
 
     public String getToken() {
         return this.token;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 
     @Override

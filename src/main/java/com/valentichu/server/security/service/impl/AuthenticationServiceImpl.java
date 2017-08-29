@@ -4,9 +4,10 @@ import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.core.domain.User;
 import com.valentichu.server.core.mapper.UserMapper;
 import com.valentichu.server.security.service.AuthenticationService;
-import com.valentichu.server.security.util.JwtTokenUtils;
+import com.valentichu.server.common.util.JwtTokenUtils;
 import com.valentichu.server.security.value.Account;
 import com.valentichu.server.security.value.RegisterInfo;
+import com.valentichu.server.security.value.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,7 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String login(Account account) throws BadCredentialsException {
+    public UserInfo login(Account account) throws BadCredentialsException {
         final String userName = account.getUserName();
         final String password = account.getUserPassword();
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(userName)) {
@@ -67,7 +68,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(userName, password);
         //此处如果校验失败会抛出BadCredentialsException由错误统一处理类返回给用户
         authenticationManager.authenticate(upToken);
-        return jwtTokenUtils.generateToken(userName);
+        final String token = jwtTokenUtils.generateToken(userName);
+
+        return new UserInfo(userName, token);
     }
 
     @Override

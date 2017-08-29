@@ -1,4 +1,4 @@
-package com.valentichu.server.security.util;
+package com.valentichu.server.common.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -28,7 +28,7 @@ public class JwtTokenUtils {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-    public String getUsernameFromToken(String originalToken) {
+    public String getUserNameFromToken(String originalToken) {
         String username;
         try {
             final Claims claims = getClaimsFromToken(originalToken);

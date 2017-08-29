@@ -1,7 +1,7 @@
 package com.valentichu.server.security.interceptor;
 
-import com.valentichu.server.security.util.CookieUtils;
-import com.valentichu.server.security.util.JwtTokenUtils;
+import com.valentichu.server.common.util.CookieUtils;
+import com.valentichu.server.common.util.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.valentichu.server.security.util;
+package com.valentichu.server.common.util;
 
 import org.springframework.stereotype.Component;
 import javax.servlet.http.Cookie;

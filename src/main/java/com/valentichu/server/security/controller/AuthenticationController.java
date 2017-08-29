@@ -4,10 +4,10 @@ import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.base.value.ResultGenerator;
 import com.valentichu.server.base.value.Result;
 import com.valentichu.server.security.service.AuthenticationService;
-import com.valentichu.server.security.util.CookieUtils;
+import com.valentichu.server.common.util.CookieUtils;
 import com.valentichu.server.security.value.Account;
 import com.valentichu.server.security.value.RegisterInfo;
-import com.valentichu.server.security.value.Token;
+import com.valentichu.server.security.value.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping(value = "/auth")
-@Api(value = "权限相关的服务",description = "权限相关的服务")
+@Api(value = "权限相关的API", description = "权限相关的API")
 public class AuthenticationController {
     @Value("${jwt.header}")
     private String header;
@@ -50,10 +50,10 @@ public class AuthenticationController {
     @ApiOperation(value = "登录",notes = "登录")
     public Result createAuthenticationToken(@RequestBody @ApiParam(value = "用户名和密码", required = true) Account account,
                                             HttpServletResponse response) throws AuthenticationException {
-        final String token = authenticationService.login(account);
-        Result result = ResultGenerator.genSuccessResult(new Token(token));
+        final UserInfo userInfo = authenticationService.login(account);
+        Result result = ResultGenerator.genSuccessResult(userInfo);
         if (enableCookie) {
-            cookieUtils.addCookie(header, token, "/", expiration, response);
+            cookieUtils.addCookie(header, userInfo.getToken(), "/", expiration, response);
         }
         return result;
     }
@@ -63,7 +63,7 @@ public class AuthenticationController {
     public Result refreshAndGetAuthenticationToken(HttpServletRequest request) throws ServiceException {
         final String oldToken = request.getHeader(header);
         final String refreshedToken = authenticationService.refresh(oldToken);
-        return ResultGenerator.genSuccessResult(new Token(refreshedToken));
+        return ResultGenerator.genSuccessResult(new UserInfo(refreshedToken));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

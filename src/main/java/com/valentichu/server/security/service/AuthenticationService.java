@@ -4,6 +4,7 @@ import com.valentichu.server.base.exception.ServiceException;
 import com.valentichu.server.core.domain.User;
 import com.valentichu.server.security.value.Account;
 import com.valentichu.server.security.value.RegisterInfo;
+import com.valentichu.server.security.value.UserInfo;
 import org.springframework.security.authentication.BadCredentialsException;
 
 /**
@@ -25,10 +26,10 @@ public interface AuthenticationService {
      * 登录
      *
      * @param account 帐号信息
-     * @return 返回Token
+     * @return 返回用户信息
      * @throws BadCredentialsException 验证失败时抛出
      */
-    String login(Account account) throws BadCredentialsException;
+    UserInfo login(Account account) throws BadCredentialsException;
 
     /**
      * 刷新
