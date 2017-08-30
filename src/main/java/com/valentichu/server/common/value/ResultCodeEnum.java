@@ -1,4 +1,4 @@
-package com.valentichu.server.base.value;
+package com.valentichu.server.common.value;
 
 /**
  * 响应码枚举，参考HTTP状态码的语义

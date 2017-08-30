@@ -21,9 +21,37 @@
         WHERE u.user_name = #{userName}
     </select>
 
-    <insert id="saveUser" parameterType="com.valentichu.server.core.domain.User">
+    <insert id="saveUser" keyProperty="user_id" parameterType="com.valentichu.server.core.domain.User">
         INSERT INTO user (user_name, user_password, role_id, role_name, gmt_create)
-        VALUES (#{userName}, #{userPassword}, #{roleId}, (SELECT role_name FROM role WHERE role_id = #{roleId}),
+        VALUES (#{userName},
+        #{userPassword},
+        #{roleId},
+        (SELECT role_name FROM role WHERE role_id = #{roleId}),
         #{gmtCreate})
+    </insert>
+
+    <select id="getCartItemNum" resultType="java.lang.Integer">
+        SELECT product_num FROM
+        user u
+        LEFT JOIN cart_item ci ON u.user_id = ci.user_id
+        LEFT JOIN good g ON ci.product_id = g.product_id
+        WHERE u.user_name = #{userName} AND g.product_id = #{productId}
+    </select>
+
+    <update id="updateCartItemNum">
+        UPDATE cart_item SET product_num = #{productNum}, gmt_modified = NOW()
+        WHERE user_id = (SELECT user_id FROM user WHERE user_name = #{userName})
+        AND product_id = #{productId}
+    </update>
+
+    <insert id="insertCartItem">
+        INSERT INTO cart_item (user_id, product_id, product_num, is_checked, gmt_create)
+        VALUES (
+        (SELECT user_id FROM user WHERE user_name = #{userName}),
+        #{productId},
+        1,
+        1,
+        now()
+        )
     </insert>
 </mapper>

@@ -1,10 +1,9 @@
-package com.valentichu.server.security.service;
+package com.valentichu.server.base.security.service;
 
 import com.valentichu.server.base.exception.ServiceException;
-import com.valentichu.server.core.domain.User;
-import com.valentichu.server.security.value.Account;
-import com.valentichu.server.security.value.RegisterInfo;
-import com.valentichu.server.security.value.UserInfo;
+import com.valentichu.server.base.security.value.Account;
+import com.valentichu.server.base.security.value.RegisterInfo;
+import com.valentichu.server.base.security.value.UserInfo;
 import org.springframework.security.authentication.BadCredentialsException;
 
 /**

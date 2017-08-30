@@ -1,4 +1,4 @@
-package com.valentichu.server.security.value;
+package com.valentichu.server.base.security.value;
 
 import com.alibaba.fastjson.JSON;
 

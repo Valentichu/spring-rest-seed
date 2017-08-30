@@ -1,10 +1,10 @@
-package com.valentichu.server.configurer;
+package com.valentichu.server.base.configurer;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.valentichu.server.security.interceptor.CookieRefreshInterceptor;
-import com.valentichu.server.security.interceptor.TokenValidateInterceptor;
+import com.valentichu.server.base.security.interceptor.CookieRefreshInterceptor;
+import com.valentichu.server.base.security.interceptor.TokenValidateInterceptor;
 import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

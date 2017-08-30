@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 取Token中的信息的工具类
  *
@@ -14,7 +16,7 @@ import org.springframework.util.StringUtils;
  * created on 2017/08/29
  */
 @Component
-public class TokenUtils {
+public class RequestUtils {
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.tokenHead}")
@@ -25,20 +27,22 @@ public class TokenUtils {
     private final JwtTokenUtils jwtTokenUtils;
 
     @Autowired
-    public TokenUtils(JwtTokenUtils jwtTokenUtils) {
+    public RequestUtils(JwtTokenUtils jwtTokenUtils) {
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    public String getUserNameFromToken(String token) throws ServiceException {
+    public String getUserNameFromHeader(HttpServletRequest request) throws ServiceException {
+        if (request == null) {
+            throw new ServiceException("请求无效");
+        }
+        final String token = request.getHeader(header);
         if (StringUtils.isEmpty(token) || !token.startsWith(tokenHead)) {
             throw new ServiceException("Token无效");
         }
-
-        String userName = jwtTokenUtils.getUserNameFromToken(token);
+        final String userName = jwtTokenUtils.getUserNameFromToken(token);
         if (StringUtils.isEmpty(userName)) {
             throw new ServiceException("Token无效");
         }
-
         return userName;
     }
 }

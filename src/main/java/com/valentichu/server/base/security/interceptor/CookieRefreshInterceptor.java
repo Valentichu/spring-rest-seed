@@ -1,4 +1,4 @@
-package com.valentichu.server.security.interceptor;
+package com.valentichu.server.base.security.interceptor;
 
 import com.valentichu.server.common.util.CookieUtils;
 import com.valentichu.server.common.util.JwtTokenUtils;

@@ -1,13 +1,13 @@
-package com.valentichu.server.security.controller;
+package com.valentichu.server.base.security.controller;
 
 import com.valentichu.server.base.exception.ServiceException;
-import com.valentichu.server.base.value.ResultGenerator;
-import com.valentichu.server.base.value.Result;
-import com.valentichu.server.security.service.AuthenticationService;
+import com.valentichu.server.common.value.ResultGenerator;
+import com.valentichu.server.common.value.Result;
+import com.valentichu.server.base.security.service.AuthenticationService;
 import com.valentichu.server.common.util.CookieUtils;
-import com.valentichu.server.security.value.Account;
-import com.valentichu.server.security.value.RegisterInfo;
-import com.valentichu.server.security.value.UserInfo;
+import com.valentichu.server.base.security.value.Account;
+import com.valentichu.server.base.security.value.RegisterInfo;
+import com.valentichu.server.base.security.value.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

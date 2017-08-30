@@ -1,9 +1,9 @@
 package com.valentichu.server.base.exception.handler;
 
 import com.valentichu.server.base.exception.ServiceException;
-import com.valentichu.server.base.value.Result;
-import com.valentichu.server.base.value.ResultCodeEnum;
-import com.valentichu.server.configurer.WebMvcConfigurer;
+import com.valentichu.server.common.value.Result;
+import com.valentichu.server.common.value.ResultCodeEnum;
+import com.valentichu.server.base.configurer.WebMvcConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;

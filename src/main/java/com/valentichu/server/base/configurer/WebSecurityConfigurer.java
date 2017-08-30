@@ -1,4 +1,4 @@
-package com.valentichu.server.configurer;
+package com.valentichu.server.base.configurer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

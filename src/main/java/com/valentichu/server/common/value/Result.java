@@ -1,4 +1,4 @@
-package com.valentichu.server.base.value;
+package com.valentichu.server.common.value;
 
 import com.alibaba.fastjson.JSON;
 import java.io.Serializable;

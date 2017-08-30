@@ -1,4 +1,4 @@
-package com.valentichu.server.security.subject;
+package com.valentichu.server.base.security.subject;
 
 import com.valentichu.server.core.domain.Authority;
 import com.valentichu.server.core.domain.User;

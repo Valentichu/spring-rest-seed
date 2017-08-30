@@ -1,4 +1,4 @@
-package com.valentichu.server.security.subject;
+package com.valentichu.server.base.security.subject;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.GrantedAuthority;

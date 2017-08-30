@@ -1,4 +1,4 @@
-package com.valentichu.server.base.value;
+package com.valentichu.server.common.value;
 
 /**
  * 响应结果生成工具
