@@ -13,9 +13,27 @@
         </collection>
     </resultMap>
 
+    <resultMap id="cartResultMap" type="com.valentichu.server.core.domain.CartItem">
+        <result property="productId" column="product_id" javaType="integer" jdbcType="BIGINT"/>
+        <result property="productNum" column="product_num" javaType="integer" jdbcType="BIGINT"/>
+        <result property="checked" column="is_checked" javaType="integer" jdbcType="TINYINT"/>
+        <collection property="good" ofType="com.valentichu.server.core.domain.Good">
+            <result property="productId" column="product_id" javaType="integer" jdbcType="BIGINT"/>
+            <result property="productName" column="product_name" javaType="string" jdbcType="VARCHAR"/>
+            <result property="productImage" column="product_image" javaType="string" jdbcType="VARCHAR"/>
+            <result property="salePrice" column="sale_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+        </collection>
+    </resultMap>
+
+    <delete id="deleteCartItem">
+        DELETE FROM cart_item
+        WHERE product_id = #{productId}
+        AND user_id = (SELECT user_id FROM user WHERE user_name = #{userName})
+    </delete>
+
     <select id="getUser" resultMap="userResultMap">
-        SELECT u.user_id, u.user_name, u.user_password, u.role_id, u.role_name, a.authority_id, a.authority_name FROM
-        user u
+        SELECT u.user_id, u.user_name, u.user_password, u.role_id, u.role_name, a.authority_id, a.authority_name
+        FROM user u
         LEFT JOIN role_authority rp ON u.role_id = rp.role_id
         LEFT JOIN authority a ON rp.authority_id = a.authority_id
         WHERE u.user_name = #{userName}
@@ -31,8 +49,8 @@
     </insert>
 
     <select id="getCartItemNum" resultType="java.lang.Integer">
-        SELECT product_num FROM
-        user u
+        SELECT product_num
+        FROM user u
         LEFT JOIN cart_item ci ON u.user_id = ci.user_id
         LEFT JOIN good g ON ci.product_id = g.product_id
         WHERE u.user_name = #{userName} AND g.product_id = #{productId}
@@ -42,6 +60,17 @@
         UPDATE cart_item SET product_num = #{productNum}, gmt_modified = NOW()
         WHERE user_id = (SELECT user_id FROM user WHERE user_name = #{userName})
         AND product_id = #{productId}
+    </update>
+
+    <update id="updateCartItemChecked">
+        UPDATE cart_item SET is_checked = #{checked}, gmt_modified = NOW()
+        WHERE user_id = (SELECT user_id FROM user WHERE user_name = #{userName})
+        AND product_id = #{productId}
+    </update>
+
+    <update id="updateCartChecked">
+        UPDATE cart_item SET is_checked = #{checked}, gmt_modified = NOW()
+        WHERE user_id = (SELECT user_id FROM user WHERE user_name = #{userName})
     </update>
 
     <insert id="insertCartItem">
@@ -54,4 +83,12 @@
         now()
         )
     </insert>
+
+    <select id="listCart" resultMap="cartResultMap">
+        SELECT g.product_id, g.product_name, ci.product_num, g.product_image, g.sale_price, ci.is_checked
+        FROM cart_item ci
+        LEFT JOIN user u  ON ci.user_id = u.user_id
+        LEFT JOIN good g  ON ci.product_id = g.product_id
+        WHERE u.user_name = #{userName}
+    </select>
 </mapper>
